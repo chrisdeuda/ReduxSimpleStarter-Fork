@@ -7,17 +7,20 @@ import VideoDetail from './components/video_detail';
 
 const API_KEY = process.env.API_YOUTUBE_URL;
 
-
-
-
 class App extends Component{
 
     constructor(props){
         super(props);
-        this.state = { videos: []};
+        this.state = {
+             videos: [],
+             selectedVideo: null
+        };
 
         YTSearch({ key: API_KEY, term: 'surfboardss'} , (data) => {
-            this.setState({videos: data});
+            this.setState({
+                videos: data,
+                selectedVideo: data[0]
+            });
         });
     }
 
@@ -25,8 +28,12 @@ class App extends Component{
         return (
             <div>
                 <SearchBar />
-                <VideoDetail video={this.state.videos[0]} />
-                <VideoList videos={this.state.videos}/>
+                <VideoDetail video={this.state.selectedVideo} />
+                <VideoList 
+                    // Uses callback functions
+                    onVideoSelect={selectedVideo => this.setState({selectedVideo})} // It just updates the apps states
+                    videos={this.state.videos}
+                />
             </div>
         );
     }
